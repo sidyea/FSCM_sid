@@ -1,5 +1,6 @@
 import numpy as np
 import skimage
+from skimage.util import crop
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import os
@@ -8,12 +9,13 @@ import scipy.misc as sm
 
 def rgb2gray(rgb):
     r, g, b = rgb[:, :, 0], rgb[:, :, 1], rgb[:, :, 2]
+    # gray = 0.2989 * r + 0.5870 * g + 0.1140 * b
     gray = 0.2989 * r + 0.5870 * g + 0.1140 * b
 
     return gray
 
 
-def load_data(dir_name='faces_imgs'):
+def load_data(dir_name):
     '''
     Load images from the "faces_imgs" directory
     Images are in JPG and we convert it to gray scale images
@@ -22,6 +24,7 @@ def load_data(dir_name='faces_imgs'):
     for filename in os.listdir(dir_name):
         if os.path.isfile(dir_name + '/' + filename):
             img = mpimg.imread(dir_name + '/' + filename)
+            img = crop(img, ((400, 180), (420, 420), (0, 0)), copy=False)
             img = rgb2gray(img)
             imgs.append(img)
     return imgs
