@@ -3,7 +3,9 @@ import skimage
 from skimage.util import crop
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
+import PIL.Image as Image
 import os
+import glob
 import scipy.misc as sm
 
 
@@ -21,22 +23,23 @@ def load_data(dir_name):
     Images are in JPG and we convert it to gray scale images
     '''
     imgs = []
-    for filename in os.listdir(dir_name):
-        if os.path.isfile(dir_name + '/' + filename):
-            img = mpimg.imread(dir_name + '/' + filename)
-            img = crop(img, ((400, 180), (420, 420), (0, 0)), copy=False)
-            img = rgb2gray(img)
-            imgs.append(img)
+    import glob
+    imagePaths = [f for f in glob.glob(dir_name + '/*.png')]  # or .jpg, .tif, etc
+    for filename in imagePaths:
+        img = Image.open(filename)
+        img = crop(img, ((400, 180), (420, 420), (0, 0)), copy=False)
+        img = rgb2gray(img)
+        imgs.append(img)
     return imgs
 
 
 def visualize(imgs, format=None, gray=False):
-    plt.figure(figsize=(20, 40))
+    plt.figure(figsize=(20, 30))
     for i, img in enumerate(imgs):
         if img.shape[0] == 3:
             img = img.transpose(1, 2, 0)
         plt_idx = i + 1
-        plt.subplot(2, 2, plt_idx)
+        plt.subplot(4, 4, plt_idx)
         plt.imshow(img, format)
     plt.show()
 
