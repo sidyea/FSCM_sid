@@ -34,7 +34,8 @@ def load_data(dir_name):
 
 
 def visualize(imgs, format=None, gray=False):
-    plt.figure(figsize=(20, 30))
+    
+    plt.figure(figsize=(20, 20))
     for i, img in enumerate(imgs):
         if img.shape[0] == 3:
             img = img.transpose(1, 2, 0)
