@@ -17,13 +17,15 @@ from skimage import segmentation
 
 # Compare two images with one another
 
-def comparer(img1, img2):
+def comparer_duo(img1, img2):
     """
-    Plots two input images
+    Plots the two images input into 
 
     Paramters
     ---------
-    img1:
+    img1, img2 : numpy.ndarray
+        The image in RGB format. By default the final dimension denotes
+        channels
     """
     fig, axs = plt.subplots(1,2, figsize=(8,14), dpi=200)
     imgs = [img1, img2]
@@ -42,7 +44,7 @@ def disk_iterations(image):
     fig, ax = plt.subplots(3,3,figsize=(15,15))
     for n, ax in enumerate(ax.flatten()):
         ax.set_title(f'Radius at {radi[n]}', fontsize = f_size)
-        ax.imshow(entropy(image_gray, disk(radi[n])), cmap = 
+        ax.imshow(entropy(img_as_ubyte(image_gray), disk(radi[n])), cmap = 
                   'magma');
         ax.set_axis_off()
     fig.tight_layout()
@@ -75,4 +77,33 @@ def threshold_checker(image, entropy_val):
         ax.imshow(threshold, cmap = 'gist_stern_r') ;
         ax.axis('off')
     fig.tight_layout()
+
+
+
+def entropy_based_thresholder(img, entropy_val, threshold = 0.5):
+    '''
+    Returns a thresholded masked image for a given entropy disk. The entropy image
+    is scaled between 0 and 1 and compared to the threshold.
+
+    Parameters
+    ----------
+
+    img : numpy.ndarray
+        The image in RGB format. By default the final dimension denotes
+        channels.
+    
+    entropy val
+        The disk value to compute image entropy.
+    
+    threshold : float
+        Threshold to create a mask for the pixels based on entropy.
+    '''
+    img_gray = rgb2gray(img)
+    entropy_image = entropy(img_gray, disk(entropy_val))
+    scaled_entropy = entropy_image / entropy_image.max() # scales the entropy vals from 0 to 1
+    mask = scaled_entropy > threshold
+    thresholded_img = img_gray * mask
+    
+    return thresholded_img 
+
 
