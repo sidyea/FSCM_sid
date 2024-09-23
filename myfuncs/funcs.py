@@ -12,10 +12,9 @@ from math import sqrt
 from skimage import segmentation
 
 
-""" Declares a set of functions used in the files:
-        1. Fuzzy Detection.ipynb"""
+# Declares a set of functions used in the files:
+#   1. Fuzzy Detection.ipynb"""
 
-# Compare two images with one another
 
 def comparer_duo(img1, img2):
     """
@@ -34,10 +33,19 @@ def comparer_duo(img1, img2):
         ax.imshow(imgs[n])
     fig.tight_layout()
 
+# Iterators to check what works better
 
-# Iterate through disk values to compare what entropy works better
+def entropy_checker(image):
+    '''
+    Iterate through footprint values to compare what entropy works 
+    better.
 
-def disk_iterations(image):
+    Parameters
+    ----------
+    image : numpy.ndarray
+        The image in RGB format. By default the final dimension denotes
+          channels.
+    '''
     image_gray = rgb2gray(image)
     f_size = 20
     radi = list(range(1,10))
@@ -50,11 +58,11 @@ def disk_iterations(image):
     fig.tight_layout()
 
 
-# Iterate through thresholded entropy values to compare works better
 
 def threshold_checker(image, entropy_val):
     '''
-    Plots different threshold values to compare
+    Iterate through threshold values to compare what threshold works
+    better.
 
     Parameters
     ----------
