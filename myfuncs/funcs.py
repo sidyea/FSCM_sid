@@ -10,7 +10,7 @@ from skimage import feature
 from skimage import filters
 from math import sqrt
 from skimage import segmentation
-
+import os, glob
 
 # Declares a set of functions used in the files:
 #   1. Fuzzy Detection.ipynb"""
@@ -58,7 +58,6 @@ def entropy_checker(image):
     fig.tight_layout()
 
 
-
 def threshold_checker(image, entropy_val):
     '''
     Iterate through threshold values to compare what threshold works
@@ -86,12 +85,12 @@ def threshold_checker(image, entropy_val):
         ax.axis('off')
     fig.tight_layout()
 
-
+# Individual functions related to Image Processing
 
 def entropy_based_thresholder(img, entropy_val, threshold = 0.5):
     '''
-    Returns a thresholded masked image for a given entropy disk. The entropy image
-    is scaled between 0 and 1 and compared to the threshold.
+    Returns a thresholded masked image for a given entropy disk. The entropy 
+    image is scaled between 0 and 1 and compared to the threshold.
 
     Parameters
     ----------
@@ -108,10 +107,42 @@ def entropy_based_thresholder(img, entropy_val, threshold = 0.5):
     '''
     img_gray = rgb2gray(img)
     entropy_image = entropy(img_gray, disk(entropy_val))
-    scaled_entropy = entropy_image / entropy_image.max() # scales the entropy vals from 0 to 1
+    scaled_entropy = entropy_image / entropy_image.max() # scales the entropy
     mask = scaled_entropy > threshold
     thresholded_img = img_gray * mask
     
     return thresholded_img 
 
+# Utility functions
 
+def open_image_set(path, filetype='png', selection='all'):
+    '''
+    Opens a set of images defined at the filepath. Only selects images with 
+    the given filetype. 
+
+    Parameters
+    ----------
+
+    path : str
+        Image filepath.
+    
+    filetype : 'png', 'jpg', 'tif'
+        The format of image files to look for in the path
+    
+    selection
+    '''
+
+    filetypes = ['png', 'jpg', 'tif']
+    if filetype not in filetypes:
+        raise ValueError("Invalid filetype. Expected one of %s" % filetypes)
+    
+    path = 'Images/Inputs/Set2'
+    imagePaths = [f for f in glob.glob(path + '/*.png')]    # or .jpg, .tif, etc.
+    image_set = []
+
+    for n, imagePath in enumerate(imagePaths):
+        image_set.append(imread(imagePath))
+
+
+    open_images = np.stack(image_set)
+    return open_images
