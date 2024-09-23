@@ -140,8 +140,6 @@ def open_image_set(path, filetype='png', grayscale = False, selection='all'):
     if filetype not in filetypes:
         raise ValueError("Invalid filetype. Expected one of %s" % filetypes)
     
-    
-    path = 'Images/Inputs/Set2'
     imagePaths = [f for f in glob.glob(path + '/*.png')]    # or .jpg, .tif, etc.
     image_set = []
 
