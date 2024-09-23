@@ -115,7 +115,7 @@ def entropy_based_thresholder(img, entropy_val, threshold = 0.5):
 
 # Utility functions
 
-def open_image_set(path, filetype='png', selection='all'):
+def open_image_set(path, filetype='png', grayscale = False, selection='all'):
     '''
     Opens a set of images defined at the filepath. Only selects images with 
     the given filetype. 
@@ -128,6 +128,10 @@ def open_image_set(path, filetype='png', selection='all'):
     
     filetype : 'png', 'jpg', 'tif'
         The format of image files to look for in the path
+
+    grayscale : bool
+        Whether returned images should be reduced to grayscale. Default
+        False
     
     selection
     '''
@@ -136,12 +140,19 @@ def open_image_set(path, filetype='png', selection='all'):
     if filetype not in filetypes:
         raise ValueError("Invalid filetype. Expected one of %s" % filetypes)
     
+    
     path = 'Images/Inputs/Set2'
     imagePaths = [f for f in glob.glob(path + '/*.png')]    # or .jpg, .tif, etc.
     image_set = []
 
     for n, imagePath in enumerate(imagePaths):
-        image_set.append(imread(imagePath))
+        
+        if grayscale == True:
+            img = rgb2gray(imread(imagePath))
+        else:
+            img = imread(imagePath)
+            
+        image_set.append(img)
 
 
     open_images = np.stack(image_set)
