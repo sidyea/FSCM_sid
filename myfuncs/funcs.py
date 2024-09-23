@@ -100,7 +100,7 @@ def entropy_based_thresholder(img, entropy_val, threshold = 0.5):
         channels.
     
     entropy val
-        The disk value to compute image entropy.
+        The footprint value to compute image entropy.
     
     threshold : float
         Threshold to create a mask for the pixels based on entropy.
