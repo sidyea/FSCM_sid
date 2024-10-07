@@ -8,6 +8,7 @@ from skimage.morphology import disk
 from skimage.color import rgb2hsv, rgb2gray, rgb2yuv
 from skimage import feature
 from skimage import filters
+from sklearn.cluster import KMeans
 from math import sqrt
 from skimage import segmentation
 import os, glob
@@ -112,6 +113,37 @@ def entropy_based_thresholder(img, entropy_val, threshold = 0.5):
     thresholded_img = img_gray * mask
     
     return thresholded_img 
+
+
+def apply_kmeans(img, k: int=2):
+    '''
+    Apply K-Means Clustering on an image. Returns a 2-D image
+
+    Parameters
+    ----------
+
+    img : numpy.ndarray
+        The image in RGB format. By default the final dimension denotes
+        channels.
+    
+    k : int
+        the number of clusters in the final image
+    '''
+    # Datatype check
+    assert isinstance(k, int), "Clusters k must be an integer!"
+
+    #reshape image
+    reshaped_image = img.reshape(img.shape[0]*img.shape[1], img.shape[2])
+
+    #apply clustering
+    clustering = KMeans(n_clusters=k, random_state=0)
+    clustering.fit(reshaped_image)
+
+    # reshape labels to mask
+    mask = clustering.labels_
+    kmeans_img = mask.reshape(img.shape[0], img.shape[1])
+
+    return kmeans_img
 
 # Utility functions
 
