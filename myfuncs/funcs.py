@@ -16,6 +16,7 @@ import os, glob
 # Declares a set of functions used in the files:
 #   1. Fuzzy Detection.ipynb"""
 
+# comparers
 
 def comparer_duo(img1, img2):
     """
@@ -34,7 +35,6 @@ def comparer_duo(img1, img2):
         ax.imshow(imgs[n])
     fig.tight_layout()
 
-# Iterators to check what works better
 
 def entropy_checker(image):
     '''
@@ -148,6 +148,7 @@ def apply_kmeans(img, k: int=2):
 # Utility functions
 
 def open_image_set(path, filetype='png', grayscale = False, selection='all'):
+
     '''
     Opens a set of images defined at the filepath. Only selects images with 
     the given filetype. 
@@ -187,3 +188,50 @@ def open_image_set(path, filetype='png', grayscale = False, selection='all'):
 
     open_images = np.stack(image_set)
     return open_images
+
+# general functions
+
+    # fourier
+
+def fourier(x, n=1, p=0.5, fi=0):
+    '''
+    return a fourier value for a given point for a certain degree n and phase fi
+
+    Parameters
+    ----------
+
+    x : float
+        point at which to evaluate the fourier series expansion
+    n : float
+        Degree of wavelet
+    p : float
+        amplitude decay exponent
+    fi : float
+        phase offset defining angle
+    '''
+    a = 2*n +1
+    return (1/(np.float_power(a, p)))*np.sin(a*x + fi)
+
+
+def fourier2D_combined(x, order=2, phi=0):
+    
+    '''
+    return a combined 2D over a given range for a certain degree n and phase fi
+
+    Parameters
+    ----------
+
+    x : float
+        points at which to evaluate the fourier series expansion
+    order : float
+        Degree of wavelet
+    fi : float
+        phase offset defining angle
+    '''
+        
+    y = np.zeros_like(x)
+    for n_n in range(order):
+        y_n = fourier(x, n=n_n+1, fi=phi)
+        y = np.add(y, y_n)
+    
+    return y
