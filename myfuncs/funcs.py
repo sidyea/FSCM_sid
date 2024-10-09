@@ -193,7 +193,7 @@ def open_image_set(path, filetype='png', grayscale = False, selection='all'):
 
     # fourier
 
-def fourier(x, n=1, p=0.5, fi=0):
+def fourier1D(x, n=1, p=0.5, fi=0):
     '''
     return a fourier value for a given point for a certain degree n and phase fi
 
@@ -213,7 +213,7 @@ def fourier(x, n=1, p=0.5, fi=0):
     return (1/(np.float_power(a, p)))*np.sin(a*x + fi)
 
 
-def fourier2D_combined(x, order=2, phi=0):
+def fourier1D_combined(x, order=2, phi=0):
     
     '''
     return a combined 2D over a given range for a certain degree n and phase fi
@@ -231,7 +231,7 @@ def fourier2D_combined(x, order=2, phi=0):
         
     y = np.zeros_like(x)
     for n_n in range(order):
-        y_n = fourier(x, n=n_n+1, fi=phi)
+        y_n = fourier1D(x, n=n_n+1, fi=phi)
         y = np.add(y, y_n)
     
     return y
