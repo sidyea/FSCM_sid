@@ -189,6 +189,35 @@ def open_image_set(path, filetype='png', grayscale = False, selection='all'):
     open_images = np.stack(image_set)
     return open_images
 
+def smoother(array , window):
+    '''
+    return a smoother version of the inpit 1D array
+
+    Parameters
+    ----------
+
+    array : numpy.ndarray
+        the 1D array of values to be smoothed
+    
+    window: int
+        the odd-values window to smooth over
+    '''
+    if (window%2) == 0:
+        raise ValueError('Only odd values permitted for window')
+    
+    if array.shape != array.ravel().shape:
+        raise ValueError('Please input a flat/1D array')
+
+    new_array = np.zeros_like(array)    
+    pad_values = np.pad(array, window) # padding for calculation
+    half = int(window/2) # half the window for calculation
+
+    for i in range(new_array.size):
+        selection = pad_values[window + i - half : window + i + half + 1]
+        new_array[i] = np.average(selection)
+
+    return new_array
+    
 # general functions
 
     # fourier
