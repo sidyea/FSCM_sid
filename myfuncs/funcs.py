@@ -147,6 +147,36 @@ def apply_kmeans(img, k: int=2):
 
 # Utility functions
 
+def peak_finder(signal, num_peaks=3):
+    """
+    This function finds the locations of the highest peaks in a given signal.
+
+    Parameters:
+    signal (numpy.ndarray): A 1D array representing the signal. The values in the array represent the amplitude of the signal at each point.
+
+    num_peaks (int, optional): The number of highest peaks to find. Default is 3.
+
+    Returns:
+    peak_locations (list): A list of indices where the highest peaks are located in the signal.
+    """
+    peak_locations = []
+    for i in range(1, len(signal)-1):
+        if signal[i] > signal[i-1] and signal[i] > signal[i+1]:
+            peak_locations.append(i)
+    # make a list of values at peak locations
+    peak_values = [signal[i] for i in peak_locations]
+    # sort the peak values
+    peak_values.sort(reverse=True)
+    # choose the top num_peaks values
+    peak_values = peak_values[:num_peaks]
+    # find the corresponding peak locations
+    peak_locations = []
+    for i in range(len(peak_values)):
+        j, = np.where(signal == peak_values[i])
+        peak_locations.append(j[0])
+    # return the peak locations
+    return peak_locations
+
 def open_image_set(path, filetype='png', grayscale = False, selection='all'):
 
     '''
