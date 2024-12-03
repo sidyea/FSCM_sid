@@ -221,7 +221,7 @@ def open_image_set(path, filetype='png', grayscale = False, selection='all'):
 
 def smoother(array , window):
     '''
-    return a smoother version of the inpit 1D array
+    return a smoother version of the input 1D array
 
     Parameters
     ----------
