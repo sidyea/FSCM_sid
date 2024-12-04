@@ -177,6 +177,45 @@ def peak_finder(signal, num_peaks=3):
     # return the peak locations
     return peak_locations
 
+def local_peaks_finder(signal, local_size=100, n_peaks=3):
+    """
+    This function finds the local peaks in a given signal by comparing each point with its neighboring points.
+    The function also considers a local window around each point to ensure that the peak is indeed the maximum within that window.
+
+    Parameters:
+    signal (numpy.ndarray): A 1D array representing the signal. The values in the array represent the amplitude of the signal at each point.
+    local_size (int, optional): The size of the local window around each point to consider for peak detection. Default is 100.
+    n_peaks (int, optional): The number of highest peaks to find. Default is 3.
+
+    Returns:
+    sorted_peak_locations (numpy.ndarray): A 1D array of indices where the highest peaks are located in the signal.
+    """
+    # append local_size zeroes to signal
+    signal_extended = np.concatenate((np.zeros(local_size), signal, np.zeros(local_size)))
+
+    peak_locations = []
+    for i in range(1, len(signal)-1):
+        if signal_extended[i] > signal_extended[i-1] and signal_extended[i] > signal_extended[i+1]:
+            # check if max in window
+            window = signal_extended[i-local_size:i+local_size]
+            if window.max() == signal_extended[i]:
+                peak_locations.append(i-local_size)
+            else:
+                continue
+
+    # sort and choose top n peaks 
+    peak_values = signal[peak_locations]
+    sort_pattern = np.argsort(peak_values) # the sorting of the peak vals would be the same as peak locs
+
+    # Apply the sort pattern to the peak locations
+    sorted_peak_locations = np.asarray(peak_locations)[sort_pattern]
+
+    if len(peak_locations) < n_peaks:
+        return sorted_peak_locations
+    else:
+        return sorted_peak_locations[-n_peaks:] # get last n peaks
+
+
 def open_image_set(path, filetype='png', grayscale = False, selection='all'):
 
     '''
