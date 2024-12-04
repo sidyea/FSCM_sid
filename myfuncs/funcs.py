@@ -188,7 +188,7 @@ def local_peaks_finder(signal, local_size=100, n_peaks=3):
     n_peaks (int, optional): The number of highest peaks to find. Default is 3.
 
     Returns:
-    sorted_peak_locations (numpy.ndarray): A 1D array of indices where the highest peaks are located in the signal.
+    sorted_peak_locations (numpy.ndarray): A 1D array of indices where the highest peaks are located in the signal. Sorted by lowest peak index to highest. 
     """
     # append local_size zeroes to signal
     signal_extended = np.concatenate((np.zeros(local_size), signal, np.zeros(local_size)))
